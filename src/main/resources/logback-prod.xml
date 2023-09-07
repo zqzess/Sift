@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="10 seconds" debug="false">
+    <contextName>Sift Server</contextName>
+    <!-- 应用名称 -->
+    <property name="APP_NAME" value="Sift"/>
+    <!--定义日志文件的存储地址-->
+    <property name="LOG_HOME_PROD" value="/Users/zqzess/Cache/log/${APP_NAME}"/>
+    <property name="LOG_HOME" value="/webapp/log/${APP_NAME}"/>
+    <!-- 定义日志格式  -->
+    <property name="LOG_PATTERN"
+              value="%contextName %d{yyyy-MM-dd HH:mm:ss.SSS} [%-5level] [%thread] [%-30.30logger{30}] %msg%n"/>
+    <!-- 高亮日志格式  -->
+    <property name="HIGHLIGHT_PATTERN"
+              value="%black(%contextName) %magenta(%d{yyyy-MM-dd HH:mm:ss.SSS}) [%thread] %highlight(%-5level) %green(%logger{50}) - %highlight(%msg) %n"/>
+
+    <property name="HIGHLIGHT_PATTERN_INFO"
+              value="%black(%contextName) %magenta(%d{yyyy-MM-dd HH:mm:ss.SSS}) [%thread] %highlight(%-5level) %green(%logger{50}) - %highlight(%msg) %n"/>
+
+    <property name="HIGHLIGHT_PATTERN_WARN"
+              value="%black(%contextName) %magenta(%d{yyyy-MM-dd HH:mm:ss.SSS}) [%thread] %yellow(%-5level) %green(%logger{50}) - %yellow(%msg) %n"/>
+
+    <property name="HIGHLIGHT_PATTERN_ERROR"
+              value="%black(%contextName) %magenta(%d{yyyy-MM-dd HH:mm:ss.SSS}) [%thread] %red(%-5level) %green(%logger{50}) - %red(%msg) %n"/>
+
+    <property name="HIGHLIGHT_PATTERN_DEBUG"
+              value="%black(%contextName) %magenta(%d{yyyy-MM-dd HH:mm:ss.SSS}) [%thread] %cyan(%-5level) %green(%logger{50}) - %cyan(%msg) %n"/>
+
+    <!-- 控制台输出-高亮 -->
+    <!--    <appender name="CONSOLE-WITH-HIGHLIGHT" class="ch.qos.logback.core.ConsoleAppender">-->
+    <!--        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">-->
+    <!--            <pattern>${HIGHLIGHT_PATTERN}</pattern>-->
+    <!--        </encoder>-->
+    <!--    </appender>-->
+
+    <appender name="CONSOLE-INFO" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${HIGHLIGHT_PATTERN_INFO}</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <appender name="CONSOLE-WARN" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${HIGHLIGHT_PATTERN_WARN}</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>WARN</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <appender name="CONSOLE-ERROR" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${HIGHLIGHT_PATTERN_ERROR}</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <appender name="CONSOLE-DEBUG" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${HIGHLIGHT_PATTERN_DEBUG}</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>DEBUG</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+
+    <!--文件输出的格式设置 -->
+    <appender name="INFO_FILE"
+              class="ch.qos.logback.core.rolling.RollingFileAppender"><!-- 如果是 true，日志会被安全的写入文件，即使其他的FileAppender也在向此文件做写入操作，效率低，默认是 false -->
+        <prudent>false</prudent><!-- 日志日常打印日志文件，生成日志示例：/logs/log-test/info.log -->
+        <file>${LOG_HOME}/log_info.log</file>
+        <rollingPolicy
+                class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy"><!-- 压缩日志的路径和日志格式，示例：info-2023-05-26_21.log.zip，%d{yyyy-MM-dd}：表示文件名称包含日期，%i:表示当前是第几个压缩文件 -->
+            <fileNamePattern>${LOG_HOME}/log-info-%d{yyyy-MM-dd}_%i.log.zip
+            </fileNamePattern><!-- 如果按天来回滚，则最大保存时间为7天，7天之前的都将被清理掉 -->
+            <maxHistory>7</maxHistory><!-- 日志总保存量为10GB,超过该日志总量的最早的日志压缩包会被清除 -->
+            <totalSizeCap>100MB</totalSizeCap>
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP"><!--文件达到 最大100MB时会被压缩和切割 -->
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy><!-- 文件输出的日志 的格式 -->
+        <encoder
+                class="ch.qos.logback.classic.encoder.PatternLayoutEncoder"><!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符-->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!-- 时间滚动输出 level为 ERROR 日志 -->
+    <appender name="ERROR_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 正在记录的日志文件的路径及文件名 -->
+        <file>${LOG_HOME}/log_error.log</file>
+        <!--日志文件输出格式-->
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+            <charset>UTF-8</charset> <!-- 此处设置字符集 -->
+        </encoder>
+        <!-- 日志记录器的滚动策略，按日期，按大小记录 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_HOME}/log-error-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <!--日志文件保留天数-->
+            <maxHistory>15</maxHistory>
+            <totalSizeCap>100MB</totalSizeCap>
+        </rollingPolicy>
+        <!-- 此日志文件只记录ERROR级别的 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <!-- 时间滚动输出 level为 DEBUG 日志 -->
+    <appender name="DEBUG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 正在记录的日志文件的路径及文件名 -->
+        <file>${LOG_HOME}/log_debug.log</file>
+        <!--日志文件输出格式-->
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+            <charset>UTF-8</charset> <!-- 此处设置字符集 -->
+        </encoder>
+        <!-- 日志记录器的滚动策略，按日期，按大小记录 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_HOME}/log-debug-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>2MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <!--日志文件保留天数-->
+            <maxHistory>7</maxHistory>
+            <totalSizeCap>10MB</totalSizeCap>
+        </rollingPolicy>
+        <!-- 此日志文件只记录DEBUG级别的 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>DEBUG</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+
+    <!-- 日志输出级别 -->
+    <logger name="org.springframework" level="INFO"/>
+    <logger name="com.zqzess.sift" level="DEBUG" additivity="false">
+        <springProfile name="dev,test">
+            <appender-ref ref="CONSOLE-INFO"/>
+            <appender-ref ref="CONSOLE-DEBUG"/>
+        </springProfile>
+        <appender-ref ref="CONSOLE-WARN"/>
+        <appender-ref ref="CONSOLE-ERROR"/>
+        <appender-ref ref="INFO_FILE"/>
+        <appender-ref ref="ERROR_FILE"/>
+        <appender-ref ref="DEBUG_FILE"/>
+    </logger>
+    <root level="INFO">
+        <springProfile name="dev,test">
+            <appender-ref ref="CONSOLE-INFO"/>
+            <appender-ref ref="CONSOLE-DEBUG"/>
+        </springProfile>
+        <appender-ref ref="CONSOLE-WARN"/>
+        <appender-ref ref="CONSOLE-ERROR"/>
+        <appender-ref ref="INFO_FILE"/>
+        <appender-ref ref="ERROR_FILE"/>
+        <appender-ref ref="DEBUG_FILE"/>
+    </root>
+
+</configuration>

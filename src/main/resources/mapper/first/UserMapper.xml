@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zqzess.sift.mapper.first.UserMapper">
+    <select id="findUserById" resultType="User">
+        select * from User WHERE User.user_id = #{userId};
+    </select>
+
+    <select id="findUserByName" resultType="User">
+        select * from User WHERE User.user_name = #{userName};
+    </select>
+
+    <insert id="saveUser">
+        insert into User(user_id, user_name, user_password, user_rank) values (#{userId}, #{userName}, #{userPassword}, #{userRank});
+    </insert>
+
+    <select id="findAllUser" resultType="User">
+        select * from User;
+    </select>
+
+    <update id="updateUser" parameterType="User">
+        update User set user_pwd=#{userPwd},user_type=#{userType},user_name=#{userName},user_phone=#{userPhone},user_avatar_url=#{userAvatarUrl} where user_id=#{userId};
+    </update>
+
+    <delete id="deleteUserById" parameterType="int">
+        delete from User where  id=#{id};
+    </delete>
+
+</mapper>
